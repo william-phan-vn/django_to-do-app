@@ -19,11 +19,15 @@ from django.urls import path
 from todo import views
 
 urlpatterns = [
+    path('', views.homepage, name='homepage'),
     path('admin/', admin.site.urls),
 
     # Auth
-    path('signup/', views.signup_user),
+    path('signup/', views.signup_user, name='signup_user'),
+    path('login/', views.login_user, name='login_user'),
+    path('logout/', views.logout_user, name='logout_user'),
 
     # To-do
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('create/', views.create_todo, name='create_todo'),
 ]
