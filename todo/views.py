@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 
 from todo.forms import TodoForm
+from todo.models import Todo
 
 
 def homepage(request):
@@ -56,7 +57,11 @@ def logout_user(request):
 
 
 def dashboard(request):
-    return render(request, 'todo/dashboard.html')
+    todos = Todo.objects.filter(user=request.user, completed_time__isnull=True).all()
+    context = {
+        'todos': todos
+    }
+    return render(request, 'todo/dashboard.html', context)
 
 
 def create_todo(request):
@@ -77,3 +82,18 @@ def create_todo(request):
         except ValueError:
             context['error'] = 'Some field have not correct format, please check.'
             return render(request, 'todo/create_todo.html', context)
+
+
+def view_todo(request, todo_pk):
+    todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
+
+    if request.method == 'GET':
+        form = TodoForm(instance=todo)
+        context = {
+            'form': form
+        }
+        return render(request, 'todo/view_todo.html', context)
+    elif request.method == 'POST':
+        form = TodoForm(data=request.POST, instance=todo)
+        form.save()
+        return redirect('dashboard')

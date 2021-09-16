@@ -2,6 +2,25 @@
 
 {% block content %}
 
-    Welcome to todo app
+    <h1>Todo List</h1>
+    <ul>
+        {% for todo in todos %}
+            <a href="{% url 'view_todo' todo.id %}">
+                <li>
+                    {% if todo.is_important %}
+                        <b>
+                    {% endif %}
+                            {{ todo.title }}
+                    {% if todo.is_important %}
+                        </b>
+                    {% endif %}
+
+                    {% if todo.memo %}
+                        - {{ todo.memo }}
+                    {% endif %}
+                </li>
+            </a>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
