@@ -29,7 +29,7 @@ urlpatterns = [
 
     # To-do
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('completed/', views.completed_todo, name='completed_todo'),
+    path('completed/', views.completed_todos, name='completed_todos'),
     path('create/', views.create_todo, name='create_todo'),
     path('todo/<int:todo_pk>/', views.view_todo, name='view_todo'),
     path('todo/<int:todo_pk>/complete', views.complete_todo, name='complete_todo'),

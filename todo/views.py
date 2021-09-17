@@ -11,6 +11,8 @@ from todo.models import Todo
 
 
 def homepage(request):
+    if request.user.is_authenticated:
+        return render(request, 'todo/dashboard.html')
     return render(request, 'todo/homepage.html')
 
 
@@ -70,14 +72,14 @@ def dashboard(request):
 
 
 @login_required
-def completed_todo(request):
+def completed_todos(request):
     todos = Todo.objects.filter(user=request.user, completed_time__isnull=False)\
                         .order_by('-completed_time')\
                         .all()
     context = {
         'todos': todos
     }
-    return render(request, 'todo/completed_todo.html', context)
+    return render(request, 'todo/completed_todos.html', context)
 
 
 @login_required
